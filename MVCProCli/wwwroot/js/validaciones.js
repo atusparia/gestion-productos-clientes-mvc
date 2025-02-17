@@ -1,5 +1,5 @@
-﻿$(document).ready(function () {
-
+﻿//$('#crearProductoModal').on('shown.bs.modal', function () {
+$(document).ready(function () {
 
     $('#crearProductoForm').validate({
         rules: {
@@ -16,7 +16,7 @@
             stock: {
                 required: true,
                 digits: true,
-                min: 1
+                minlength: 1
             }
         },
         messages: {
@@ -37,20 +37,10 @@
             }
         },
         submitHandler: function (form) {
-            Swal.fire({
-                title: "¿Estás seguro?",
-                text: "¿Deseas agregar este producto?",
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Sí, agregar",
-                cancelButtonText: "Cancelar"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    CreateProducto();
-                }
-            });
+            //alert('Formulario enviado con éxito.');
+            //form.submit();
+            CreateProducto();
+            //$('#crearProductoModal').modal('hide');
         }
     });
 });

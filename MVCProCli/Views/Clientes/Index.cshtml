@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="es-pe">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<body>
+    <h1>Lista de Clientes</h1>
+
+    <input type="text" id="txtFiltro" />
+    <button id="btnListarClientes" class="btn btn-primary">Listar</button>
+    <button id="btnCrearCliente" class="btn btn-primary">Crear</button>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Acción</th>
+                <th>ID</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="crearClienteModal" tabindex="-1" role="dialog" aria-labelledby="crearClienteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearClienteLabel">Crear Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="crearClienteForm">
+                        <div class="form-group">
+                            <label for="Name">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" />
+                            <span class="error" id="nombreError"></span><br>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="Name">Correo</label>
+                            <input type="text" id="correo" name="correo" class="form-control" />
+                            <span class="error" id="correoError"></span><br>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="Name">Teléfono</label>
+                            <input type="text" id="telefono" name="telefono" class="form-control" />
+                            <span class="error" id="telefonoError"></span><br>
+                        </div>
+                        <br />
+                        <input type="submit" id="btnGuardarCliente" class="btn btn-success" value="Guardar">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+
+        $('#btnCrearCliente').click(function () {
+            $("#crearClienteModal").modal('show');
+        });
+
+        $('#btnListarClientes').click(function () {
+            GetClientes();
+        });
+
+
+
+        $('#btnGuardarCliente').click(function (event) {
+            alert('Grabando');
+            event.preventDefault();
+
+            CreateCliente();
+
+            /*
+            if ($("#crearProductoForm").validate()) {
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: "Producto agregado correctamente.",
+                    icon: "success"
+                });
+            } else {
+                Swal.fire({
+                    title: "¡Error!",
+                    text: "Por favor, completa correctamente los campos.",
+                    icon: "error"
+                });
+            }
+            */
+        });
+
+
+        function CreateCliente() {
+            $.ajax({
+                type: "POST",
+                url: "/Clientes/InsertClientes",
+                data: {
+                    nombre: $("#nombre").val(),
+                    correo: $("#correo").val(),
+                    telefono: $("#telefono").val(),
+                },
+                success: function (response) {
+                    //alert('Registro exitoso');
+                    //alert(response.message);
+
+                    Swal.fire({
+                        title: "Buen trabajo!",
+                        text: response.message,
+                        icon: "success"
+                    });
+
+                    $('#crearClienteModal').modal('hide');
+                    GetClientes();
+                },
+                error: function () {
+                    alert('Hubo un error al enviar el formulario');
+                }
+            });
+        }
+
+
+        function GetClientes()
+        {
+            var filtroCliente = $("#txtFiltro").val();
+
+            $.ajax({
+                type: "GET",
+                url: "/Clientes/GetClientes?filtro=" + filtroCliente,
+                success: function (result) {
+
+                    //alert('Luego de la URL');
+                    console.log(result);
+
+                    var tableBody = $('table tbody');
+                    tableBody.empty(); // Vaciar la tabla
+
+                    result.forEach(function (cliente) {
+                        var newRow = `<tr>
+                                            <td>${cliente.nombre}</td>
+                                            <td>${cliente.correo}</td>
+                                            <td>${cliente.telefono}</td>
+                                                <td>
+                    <button class="btnEliminar" data-id="${cliente.id}">❌ Eliminar</button>
+                                            </td>
+                                                <td>${cliente.id}</td>
+                                        </tr>`;
+                        tableBody.append(newRow);
+                    });
+                },
+                error: function () {
+                    alert('Hubo un error al listar los cliente.');
+                }
+            });
+        }
+    });
+</script>

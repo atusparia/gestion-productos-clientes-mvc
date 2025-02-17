@@ -3,11 +3,11 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-pe">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clase Básica de jQuery</title>
+    <title>Productos</title>
 
     <style>
         .error {
@@ -16,78 +16,77 @@
         }
     </style>
 
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>    
     <script src="~/js/validaciones.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
+
 </head>
-</html>
 
-<h1>Lista de Productos</h1>
+<body>
+    <h1>Lista de Productos</h1>
 
+    <input type="text" id="txtFiltro" />
+    <button id="btnListarProductos" class="btn btn-primary">Listar</button>
+    <button id="btnCrearProducto" class="btn btn-primary">Crear</button>
 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acción</th>
+                <th>ID</th>
+            </tr>
+        </thead>
 
-<input type="text" id="txtFiltro" />
-<button id="btnListarProductos" class="btn btn-primary">Listar</button>
-<button id="btnCrearProducto" class="btn btn-primary">Crear</button>
+        <tbody>
+        </tbody>
+    </table>
 
-<table class="table">
-    <thead>
-        <tr>            
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Acción</th>
-            <th>ID</th>
-        </tr>
-    </thead>
-
-    <tbody>
-    </tbody>
-</table>
-
-
-<!-- Modal para crear estudiante -->
-<div class="modal fade" id="crearProductoModal" tabindex="-1" role="dialog" aria-labelledby="crearProductoLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="crearProductoLabel">Crear Producto</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- El contenido del modal se carga aquí -->
-                <div>
+    <!-- Modal para crear producto -->
+    <div class="modal fade" id="crearProductoModal" tabindex="-1" role="dialog" aria-labelledby="crearProductoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearProductoLabel">Crear Producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
                     <form id="crearProductoForm">
                         <div class="form-group">
                             <label for="Name">Nombre</label>
                             <input type="text" id="nombre" name="nombre" class="form-control" />
+                            <span class="error" id="nombreError"></span><br>
                         </div>
                         <br />
                         <div class="form-group">
                             <label for="Name">Precio</label>
                             <input type="text" id="precio" name="precio" class="form-control" />
+                            <span class="error" id="precioError"></span><br>
                         </div>
                         <br />
                         <div class="form-group">
                             <label for="Name">Stock</label>
                             <input type="text" id="stock" name="stock" class="form-control" />
+                            <span class="error" id="stockError"></span><br>
                         </div>
-                        <br />                        
-                        <input type="submit" id="btnGrabarProducto" class="btn btn-success" value="Guardar"></input>
+                        <br />
+                        <input type="submit" id="btnGuardarProducto" class="btn btn-success" value="Guardar">
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>
 
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 <script>
@@ -96,36 +95,18 @@
         //alert('ajax');
 
         $('#btnCrearProducto').click(function () {            
-            $('#crearProductoModal').modal('show');
+            $("#crearProductoModal").modal('show');
         });
                
 
         $('#btnListarProductos').click(function () {                                    
             GetProductos();
         });
-
         
-        $('#btnGrabarProducto').click(function (event) {
-            alert('Grabando');
-            //event.preventDefault();
+        $('#btnGuardarProducto').click(function () {
+            alert('Para GUARDAR');
 
-            //CreateProducto();
-
-            if ($("#crearProductoForm").validate()) {
-                Swal.fire({
-                    title: "¡Éxito!",
-                    text: "Producto agregado correctamente.",
-                    icon: "success"
-                });
-            } else {
-                Swal.fire({
-                    title: "¡Error!",
-                    text: "Por favor, completa correctamente los campos.",
-                    icon: "error"
-                });
-            }
         });
-        
 
         $(document).on("click", ".btnEliminar", function () {
             var productoId = $(this).data("id");
@@ -228,6 +209,5 @@
                 }
             });
         }
-
     });
 </script>

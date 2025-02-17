@@ -17,6 +17,11 @@ namespace MVCProCli.Controllers
             return View();
         }
 
+        public IActionResult Prueba()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> GetProductos(string filtro)        
         {
             HttpClient httpClient = new HttpClient();
