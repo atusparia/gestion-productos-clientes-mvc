@@ -14,6 +14,7 @@
             <th>Nombre</th>
             <th>Precio</th>
             <th>Stock</th>
+            <th>Acción</th>
         </tr>
     </thead>
 
@@ -61,28 +62,67 @@
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <script>
     $(document).ready(function () {
 
         //alert('ajax');
 
-        $('#btnCrearProducto').click(function () {
-            //Si quiero mostrar sin usar la vista parcial
+        $('#btnCrearProducto').click(function () {            
             $('#crearProductoModal').modal('show');
         });
                
 
-        $('#btnListarProductos').click(function () {
+        $('#btnListarProductos').click(function () {                                    
+            GetProductos();
+        });
+
+
+        $('#grabarProductoBoton').click(function (event) {
+            event.preventDefault();
+
+            CreateProducto();
+        });
+
+        function CreateProducto() {
+            $.ajax({
+                type: "POST",
+                url: "/Productos/InsertProductos",
+                data: {
+                    nombre: $("#nombre").val(),
+                    precio: $("#precio").val(),
+                    stock: $("#stock").val(),                    
+                },
+                success: function (response) {
+                    //alert('Registro exitoso');
+                    //alert(response.message);
+
+                    Swal.fire({
+                        title: "Buen trabajo!",
+                        text: response.message,
+                        icon: "success"
+                    });
+
+                    $('#crearProductoModal').modal('hide');
+                    GetProductos();
+                },
+                error: function () {
+                    alert('Hubo un error al enviar el formulario');
+                }
+            });
+        }
+
+        function GetProductos() 
+        { 
             var filtroProducto = $("#txtFiltro").val();
-            
-            //alert('botón ajax ' + filtro);
 
             $.ajax({
-                type: "GET",             
+                type: "GET",
                 url: "/Productos/GetProductos?filtro=" + filtroProducto,
                 success: function (result) {
-                    
+
                     //alert('Luego de la URL');
                     console.log(result);
 
@@ -91,10 +131,13 @@
 
                     result.forEach(function (producto) {
                         var newRow = `<tr>
-                                        <td>${producto.nombre}</td>
-                                        <td>${producto.precio}</td>
-                                        <td>${producto.stock}</td>
-                                    </tr>`;
+                                            <td>${producto.nombre}</td>
+                                            <td>${producto.precio}</td>
+                                            <td>${producto.stock}</td>
+                                                <td>
+                    <button class="btnEliminar" data-id="${producto.id}">❌ Eliminar</button>
+                                            </td>
+                                        </tr>`;
                         tableBody.append(newRow);
                     });
                 },
@@ -102,10 +145,7 @@
                     alert('Hubo un error al listar los productos.');
                 }
             });
-        });
-
-
-
+        }
 
     });
 </script>
