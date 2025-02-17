@@ -5,6 +5,7 @@ using MVCProCli.Models.Response;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MVCProCli.Controllers
 {
@@ -84,18 +85,27 @@ namespace MVCProCli.Controllers
         }
 
 
-        [HttpDelete]
-        public async Task<IActionResult> Eliminar(int id)
+        [HttpPut]
+        public async Task<IActionResult> DeleteProductos(int id)
         {
             if (id <= 0)
             {
                 return BadRequest("ID de producto inválido.");
             }
 
+            ProductoRequestV2 request = new ProductoRequestV2
+            {
+                Id = id
+            };          
             using HttpClient httpClient = new HttpClient();
-            string requestUrl = url + "/Eliminar/" + id;
+                        
+            url = url + "/Eliminar";
 
-            HttpResponseMessage response = await httpClient.DeleteAsync(requestUrl);
+            string jsonRequest = JsonSerializer.Serialize(request);
+
+            HttpContent content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await httpClient.PutAsync(url,content);
 
             if (response.IsSuccessStatusCode)
             {

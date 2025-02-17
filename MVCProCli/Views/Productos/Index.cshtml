@@ -87,6 +87,46 @@
             CreateProducto();
         });
 
+        $(document).on("click", ".btnEliminar", function () {
+            var productoId = $(this).data("id");
+            
+            //alert('ProductoID ' + productoId);
+            
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "No podrás revertir esta acción.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => 
+            {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "PUT",
+                        url: "/Productos/DeleteProductos/" + productoId,
+                        success: function (response) {
+                            //alert(response.message);                        
+
+                            Swal.fire({
+                                title: "Buen trabajo!",
+                                text: response.message,
+                                icon: "success"
+                            });
+
+                            GetProductos();
+                        },
+                        error: function () {
+                            alert("Error al eliminar");
+                        }
+                    });
+                }
+            
+            });
+        });
+
         function CreateProducto() {
             $.ajax({
                 type: "POST",
