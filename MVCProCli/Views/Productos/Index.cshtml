@@ -2,7 +2,32 @@
     ViewData["Title"] = "Index";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase Básica de jQuery</title>
+
+    <style>
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>    
+    <script src="~/js/validaciones.js"></script>
+
+</head>
+</html>
+
 <h1>Lista de Productos</h1>
+
+
 
 <input type="text" id="txtFiltro" />
 <button id="btnListarProductos" class="btn btn-primary">Listar</button>
@@ -53,7 +78,7 @@
                             <input type="text" id="stock" name="stock" class="form-control" />
                         </div>
                         <br />                        
-                        <button type="button" id="grabarProductoBoton" class="btn btn-success">Guardar</button>
+                        <input type="submit" id="btnGrabarProducto" class="btn btn-success" value="Guardar"></input>
                     </form>
                 </div>
             </div>
@@ -62,7 +87,6 @@
 </div>
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -80,12 +104,28 @@
             GetProductos();
         });
 
+        
+        $('#btnGrabarProducto').click(function (event) {
+            alert('Grabando');
+            //event.preventDefault();
 
-        $('#grabarProductoBoton').click(function (event) {
-            event.preventDefault();
+            //CreateProducto();
 
-            CreateProducto();
+            if ($("#crearProductoForm").validate()) {
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: "Producto agregado correctamente.",
+                    icon: "success"
+                });
+            } else {
+                Swal.fire({
+                    title: "¡Error!",
+                    text: "Por favor, completa correctamente los campos.",
+                    icon: "error"
+                });
+            }
         });
+        
 
         $(document).on("click", ".btnEliminar", function () {
             var productoId = $(this).data("id");
