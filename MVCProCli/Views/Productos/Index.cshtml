@@ -15,6 +15,7 @@
             <th>Precio</th>
             <th>Stock</th>
             <th>Acción</th>
+            <th>ID</th>
         </tr>
     </thead>
 
@@ -137,6 +138,7 @@
                                                 <td>
                     <button class="btnEliminar" data-id="${producto.id}">❌ Eliminar</button>
                                             </td>
+                                                <td>${producto.id}</td>
                                         </tr>`;
                         tableBody.append(newRow);
                     });
