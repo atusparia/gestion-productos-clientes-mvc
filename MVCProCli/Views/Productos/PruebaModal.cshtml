@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewData["Title"] = "PruebaModal";
+}
+
+<h1>PruebaModal</h1>
+
+<!DOCTYPE html>
+<html lang="es-pe">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    
+
+</head>
+
+<body>
+    <h1>Lista de Clientes</h1>
+        
+    <button id="btnCrearCliente" class="btn btn-primary">Crear</button>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Acción</th>
+                <th>ID</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+    </table>
+
+    <!-- Modal CREAR -->
+    <div class="modal fade" id="crearClienteModal" tabindex="-1" role="dialog" aria-labelledby="crearClienteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearClienteLabel">Crear Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="crearClienteForm">
+                        <div class="form-group">
+                            <label for="Name">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" />
+                            <span class="error" id="nombreError"></span><br>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="Name">Correo</label>
+                            <input type="text" id="correo" name="correo" class="form-control" />
+                            <span class="error" id="correoError"></span><br>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="Name">Teléfono</label>
+                            <input type="text" id="telefono" name="telefono" class="form-control" />
+                            <span class="error" id="telefonoError"></span><br>
+                        </div>
+                        <br />
+                        <input type="submit" id="btnGuardarCliente" class="btn btn-success" value="Guardar">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+
+        $('#btnCrearCliente').click(function () {
+            $("#crearClienteModal").modal('show');
+        });
+    });
+</script>

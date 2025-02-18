@@ -102,6 +102,7 @@
 
         $('#btnCrearCliente').click(function () {
             $("#crearClienteModal").modal('show');
+            $("#crearClienteForm")[0].reset();
         });
 
         $('#btnListarClientes').click(function () {
@@ -109,7 +110,7 @@
         });
                 
         $('#btnGuardarCliente').click(function (event) {
-            alert('Grabando');
+            //alert('Grabando');
             event.preventDefault();
 
             CreateCliente();

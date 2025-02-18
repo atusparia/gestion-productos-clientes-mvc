@@ -1,5 +1,4 @@
-﻿//$('#crearProductoModal').on('shown.bs.modal', function () {
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
     $('#crearProductoForm').validate({
         rules: {
@@ -28,7 +27,7 @@ $(document).ready(function () {
             precio: {
                 required: "Por favor, ingrese el precio.",
                 digits: "El precio solo debe contener dígitos.",
-                minlength: "El precio debe ser mayor que 0"
+                min: "El precio debe ser mayor que 0"
             },
             stock: {
                 required: "Por favor, ingrese el stock.",
@@ -37,10 +36,10 @@ $(document).ready(function () {
             }
         },
         submitHandler: function (form) {
-            //alert('Formulario enviado con éxito.');
-            //form.submit();
+            // Lógica para guardar el producto
             CreateProducto();
             $('#crearProductoModal').modal('hide');
         }
     });
+
 });
