@@ -14,6 +14,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 
@@ -22,7 +23,7 @@
 
     <input type="text" id="txtFiltro" />
     <button id="btnListarClientes" class="btn btn-primary">Listar</button>
-    <button id="btnCrearCliente" class="btn btn-primary">Crear</button>
+    <button id="btnCrearCliente" class="btn btn-primary">Crear</button>    
 
     <table class="table">
         <thead>
@@ -39,7 +40,7 @@
         </tbody>
     </table>
 
-    <!-- Modal -->
+    <!-- Modal CREAR -->
     <div class="modal fade" id="crearClienteModal" tabindex="-1" role="dialog" aria-labelledby="crearClienteLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -75,8 +76,26 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal ELIMINAR -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">¿Está seguro que deseas eliminar?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnEliminarCliente" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
+
 
 <script>
     $(document).ready(function () {
@@ -88,9 +107,7 @@
         $('#btnListarClientes').click(function () {
             GetClientes();
         });
-
-
-
+                
         $('#btnGuardarCliente').click(function (event) {
             alert('Grabando');
             event.preventDefault();
@@ -114,6 +131,46 @@
             */
         });
 
+        $(document).on("click", ".btnEliminar", function () {
+            var clienteId = $(this).data("id");
+
+            //alert('Cliente ID: ' + clienteId);
+
+            $("#confirmModal").data("id", clienteId);
+
+            $("#confirmModal").modal('show');           
+        });
+
+        $(document).on("click", "#btnEliminarCliente", function (event) {
+
+            var clienteId = $("#confirmModal").data("id");
+
+            if (clienteId) {
+                //alert("Registro con ID " + clienteId + " eliminado");
+
+                $.ajax({
+                    type: "PUT",
+                    url: "/Clientes/DeleteClientes/" + clienteId,
+                    success: function (response) {
+                        //alert(response.message);
+
+                        Swal.fire({
+                            title: "Buen trabajo!",
+                            text: response.message,
+                            icon: "success"
+                        });
+
+                        GetClientes();
+                    },
+                    error: function () {
+                        alert("Error al eliminar");
+                    }
+                });
+
+                // Cerrar el modal
+                $("#confirmModal").modal("hide");
+            }
+        });
 
         function CreateCliente() {
             $.ajax({
@@ -164,10 +221,8 @@
                                             <td>${cliente.nombre}</td>
                                             <td>${cliente.correo}</td>
                                             <td>${cliente.telefono}</td>
-                                                <td>
-                    <button class="btnEliminar" data-id="${cliente.id}">❌ Eliminar</button>
-                                            </td>
-                                                <td>${cliente.id}</td>
+                                            <td><button class="btnEliminar" data-id="${cliente.id}">❌ Eliminar</button></td>
+                                            <td>${cliente.id}</td>
                                         </tr>`;
                         tableBody.append(newRow);
                     });

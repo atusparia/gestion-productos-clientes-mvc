@@ -81,5 +81,38 @@ namespace MVCProCli.Controllers
             }
         }
 
+
+        [HttpPut]
+        public async Task<IActionResult> DeleteClientes(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("ID de cliente inválido.");
+            }
+
+            ClienteRequestV2 request = new ClienteRequestV2
+            {
+                Id = id
+            };
+            using HttpClient httpClient = new HttpClient();
+
+            url = url + "/Eliminar";
+
+            string jsonRequest = JsonSerializer.Serialize(request);
+
+            HttpContent content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await httpClient.PutAsync(url, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Ok(new { message = "Cliente eliminado correctamente." });
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Error al eliminar el producto.");
+            }
+        }
+
     }
 }

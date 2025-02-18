@@ -40,7 +40,7 @@ $(document).ready(function () {
             //alert('Formulario enviado con éxito.');
             //form.submit();
             CreateProducto();
-            //$('#crearProductoModal').modal('hide');
+            $('#crearProductoModal').modal('hide');
         }
     });
 });
